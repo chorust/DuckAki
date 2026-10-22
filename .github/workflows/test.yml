@@ -1,0 +1,63 @@
+name: DuckAki CI (Darwin arm64)
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+    inputs:
+      run_live_smoke:
+        description: 'Run live network smoke tests against real Eastmoney endpoint'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  offline-regression:
+    name: Offline Host & SQL Regression (macOS arm64)
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.92.0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install DuckDB CLI v1.5.5
+        run: |
+          curl -sSLo /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/download/v1.5.5/duckdb_cli-osx-universal.zip
+          unzip -q /tmp/duckdb_cli.zip -d /usr/local/bin
+          chmod +x /usr/local/bin/duckdb
+          DUCKDB_VER=$(duckdb --version)
+          echo "Installed DuckDB CLI: $DUCKDB_VER"
+          case "$DUCKDB_VER" in
+            *v1.5.5*|*d8cdaa33fd*) echo "CLI version matches requirement" ;;
+            *) echo "Unexpected DuckDB version: $DUCKDB_VER" && exit 1 ;;
+          esac
+
+      - name: Configure environment
+        run: |
+          make configure
+
+      - name: Run offline regression test suite
+        run: |
+          make test_offline
+
+      - name: Build release extension
+        run: |
+          make release
+
+      - name: Run live smoke tests (Manual Dispatch Only)
+        if: ${{ inputs.run_live_smoke == true }}
+        run: |
+          duckdb -unsigned -c "LOAD '$(pwd)/build/release/extension/duckaki/duckaki.duckdb_extension'; $(cat tests/live/smoke.sql)"

@@ -1,0 +1,54 @@
+[
+  {
+    "symbol": "sz000001",
+    "trade_date": "2024-01-02",
+    "open": 9.18,
+    "high": 9.22,
+    "low": 9.10,
+    "close": 9.15,
+    "volume_shares": 1234500,
+    "amount": 11300000.5,
+    "currency": "CNY",
+    "source": "eastmoney",
+    "adjustment": "none"
+  },
+  {
+    "symbol": "sz000001",
+    "trade_date": "2024-01-03",
+    "open": 9.15,
+    "high": 9.25,
+    "low": 9.12,
+    "close": 9.18,
+    "volume_shares": 2345600,
+    "amount": 21500000.0,
+    "currency": "CNY",
+    "source": "eastmoney",
+    "adjustment": "none"
+  },
+  {
+    "symbol": "sz000001",
+    "trade_date": "2024-01-04",
+    "open": 9.18,
+    "high": 9.20,
+    "low": 9.05,
+    "close": 9.10,
+    "volume_shares": 3456700,
+    "amount": 31500000.75,
+    "currency": "CNY",
+    "source": "eastmoney",
+    "adjustment": "none"
+  },
+  {
+    "symbol": "sz000001",
+    "trade_date": "2024-01-05",
+    "open": 9.10,
+    "high": 9.28,
+    "low": 9.08,
+    "close": 9.25,
+    "volume_shares": 4567800,
+    "amount": 42100000.2,
+    "currency": "CNY",
+    "source": "eastmoney",
+    "adjustment": "none"
+  }
+]

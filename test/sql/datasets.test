@@ -1,0 +1,26 @@
+# name: test/sql/datasets.test
+# description: Contract tests for aki_datasets() table function
+# group: [duckaki]
+
+require duckaki
+
+query IIIIII
+DESCRIBE SELECT * FROM aki_datasets();
+----
+dataset	VARCHAR	YES	NULL	NULL	NULL
+function_name	VARCHAR	YES	NULL	NULL	NULL
+source	VARCHAR	YES	NULL	NULL	NULL
+description	VARCHAR	YES	NULL	NULL	NULL
+
+# 2. Delivered capabilities check (exactly 1 row: stock_daily / aki_stock_daily / eastmoney)
+query IIII
+SELECT * FROM aki_datasets();
+----
+stock_daily	aki_stock_daily	eastmoney	仅 sz000001；历史日线；不复权；最多 366 自然日
+
+# 3. Exactly 1 row returned
+query I
+SELECT count(*) FROM aki_datasets();
+----
+1
+

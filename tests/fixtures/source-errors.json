@@ -1,0 +1,56 @@
+{
+  "rc_nonzero": {
+    "rc": 10001,
+    "message": "upstream service error"
+  },
+  "wrong_code": {
+    "rc": 0,
+    "data": {
+      "code": "000002",
+      "market": 0,
+      "klines": []
+    }
+  },
+  "wrong_market": {
+    "rc": 0,
+    "data": {
+      "code": "000001",
+      "market": 1,
+      "klines": []
+    }
+  },
+  "null_data": {
+    "rc": 0,
+    "data": null
+  },
+  "bad_kline_format": {
+    "rc": 0,
+    "data": {
+      "code": "000001",
+      "market": 0,
+      "klines": [
+        "2024-01-05,9.18,9.20"
+      ]
+    }
+  },
+  "non_finite_price": {
+    "rc": 0,
+    "data": {
+      "code": "000001",
+      "market": 0,
+      "klines": [
+        "2024-01-05,NaN,9.20,9.25,9.15,12,12000.0,1.09,0.22,0.02,0.01"
+      ]
+    }
+  },
+  "volume_overflow": {
+    "rc": 0,
+    "data": {
+      "code": "000001",
+      "market": 0,
+      "klines": [
+        "2024-01-05,9.18,9.20,9.25,9.15,999999999999999999999999,12000.0,1.09,0.22,0.02,0.01"
+      ]
+    }
+  }
+}

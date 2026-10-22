@@ -1,0 +1,67 @@
+# name: test/sql/stock_daily.test
+# description: SQL contract tests for aki_stock_daily table function
+# group: [duckaki]
+
+require duckaki
+
+# 1. 12-column schema contract: order, name, type
+query IIIIII
+DESCRIBE SELECT * FROM aki_stock_daily('sz000001', DATE '2024-01-01', DATE '2024-01-05', source='eastmoney');
+----
+symbol	VARCHAR	YES	NULL	NULL	NULL
+trade_date	DATE	YES	NULL	NULL	NULL
+open	DOUBLE	YES	NULL	NULL	NULL
+high	DOUBLE	YES	NULL	NULL	NULL
+low	DOUBLE	YES	NULL	NULL	NULL
+close	DOUBLE	YES	NULL	NULL	NULL
+volume_shares	BIGINT	YES	NULL	NULL	NULL
+amount	DOUBLE	YES	NULL	NULL	NULL
+currency	VARCHAR	YES	NULL	NULL	NULL
+source	VARCHAR	YES	NULL	NULL	NULL
+adjustment	VARCHAR	YES	NULL	NULL	NULL
+fetched_at	TIMESTAMP WITH TIME ZONE	YES	NULL	NULL	NULL
+
+# 2. Unsupported symbol rejected with DUCKAKI_INVALID_ARGUMENT during bind
+statement error
+SELECT * FROM aki_stock_daily('sh600519', DATE '2024-01-01', DATE '2024-01-05', source='eastmoney');
+----
+DUCKAKI_INVALID_ARGUMENT
+
+# 3. Symbol missing market prefix rejected during bind
+statement error
+SELECT * FROM aki_stock_daily('000001', DATE '2024-01-01', DATE '2024-01-05', source='eastmoney');
+----
+DUCKAKI_INVALID_ARGUMENT
+
+# 4. Inverted dates rejected during bind
+statement error
+SELECT * FROM aki_stock_daily('sz000001', DATE '2024-01-10', DATE '2024-01-05', source='eastmoney');
+----
+DUCKAKI_INVALID_ARGUMENT
+
+# 5. Date range exceeding 366 days rejected during bind
+statement error
+SELECT * FROM aki_stock_daily('sz000001', DATE '2023-01-01', DATE '2024-02-01', source='eastmoney');
+----
+DUCKAKI_LIMIT_EXCEEDED
+
+# 6. Unsupported source rejected during bind
+statement error
+SELECT * FROM aki_stock_daily('sz000001', DATE '2024-01-01', DATE '2024-01-05', source='sina');
+----
+DUCKAKI_INVALID_ARGUMENT
+
+# 7. NULL symbol parameter rejected during bind
+statement error
+SELECT * FROM aki_stock_daily(NULL, DATE '2024-01-01', DATE '2024-01-05', source='eastmoney');
+----
+DUCKAKI_INVALID_ARGUMENT
+
+# 8. External access disabled blocks query at bind time
+statement ok
+SET enable_external_access=false;
+
+statement error
+SELECT * FROM aki_stock_daily('sz000001', DATE '2024-01-01', DATE '2024-01-05', source='eastmoney');
+----
+DUCKAKI_EXTERNAL_ACCESS_DISABLED

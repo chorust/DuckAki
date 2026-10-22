@@ -1,0 +1,38 @@
+# Build artifacts
+target/
+build/
+configure/
+debug/
+release/
+duckdb_unittest_tempdir/
+
+# Rust artifacts
+*.rs.bk
+*.rlib
+*.prof*
+
+# Python & virtual environments
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+*.egg-info/
+
+# Databases and validation outputs
+*.duckdb
+*.duckdb.tmp
+*.duckdb.wal
+/tmp/duckaki-validation/
+
+# Logs and environment
+*.log
+.env*
+*.tmp
+*.swp
+
+# IDE and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
