@@ -18,8 +18,8 @@ all: configure debug
 include extension-ci-tools/makefiles/c_api_extensions/base.Makefile
 include extension-ci-tools/makefiles/c_api_extensions/rust.Makefile
 
-# Override pip install to use exact package version 1.5.5 without git tag 'v' prefix
-DUCKDB_PIP_INSTALL = duckdb==1.5.5
+# Pin DuckDB and install pytz for Python TIMESTAMPTZ result conversion.
+DUCKDB_PIP_INSTALL = duckdb==1.5.5 pytz
 
 # Ensure extension_version fits 32-byte header field even with no git commits
 extension_version:

@@ -17,7 +17,7 @@ DuckAki 是面向 DuckDB 的原生财经数据扩展（Rust C API extension）�
 
 ### 1. 构建与测试
 ```bash
-# 配置虚拟环境与依赖
+# 配置虚拟环境与依赖（含 Python TIMESTAMPTZ 结果转换所需的 pytz）
 make configure
 
 # 编译 release 产物 (含 DuckDB metadata header/footer)
